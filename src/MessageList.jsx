@@ -9,7 +9,10 @@ class MessageList extends Component {
                 {this.props.messages.map(messageArr =>
                     <Message    content={messageArr.content}
                                 username={messageArr.username}
-                                key={messageArr.id}/>
+                                key={messageArr.id}
+                                notification={messageArr.notification}
+                                type={messageArr.type}
+                                color={messageArr.color}/>
                 )}
             </main>
         )
