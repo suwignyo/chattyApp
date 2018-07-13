@@ -16,7 +16,9 @@ const server = express()
 
 // Create the WebSockets server
 const wss = new SocketServer({ server });
-let clients = {}
+
+const imageUrlTest = /https?:\/\/.*\.(?:png|jpg|gif)/;
+
 // Set up a callback that will run when a client connects to the server
 // When a client connects they are assigned a socket, represented by
 // the ws parameter in the callback.
@@ -47,21 +49,26 @@ wss.broadcast = data => {
 function handleMessage(incoming, client){
   const clientId = uuid();
   msg = JSON.parse(incoming)
-  
-  console.log('msg',msg)
+  const incomingMessage = {
+    username: msg.username,
+    content: msg.content,
+    type: '',
+    id: clientId,
+    color: msg.color
+  }
+  console.log('msg',msg.content)
   switch(msg.type){
     case "userNewMessage":
-      const incomingMessage = {
-        username: msg.username,
-        content: msg.content,
-        type: 'incomingMessage',
-        id: clientId,
-        color: msg.color
+      if (msg.content.match(imageUrlTest)) { 
+        incomingMessage.content = msg.content.split(' ')
+        incomingMessage.type = 'incomingMessagePicture'
+        console.log('incoming message with URL:', incomingMessage)
+      } else {
+        incomingMessage.type = 'incomingMessage'
+        console.log('incoming message:', incomingMessage)
       }
       wss.broadcast(JSON.stringify(incomingMessage))
-      console.log('incoming message:',incomingMessage)
       break;
-  
     case "userNotification":
       const incomingNotification = {
         username: msg.username,

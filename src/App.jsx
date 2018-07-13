@@ -1,17 +1,18 @@
-import React, {Component} from 'react'
-import MessageList        from './MessageList.jsx'
-import ChatBar            from './ChatBar.jsx'
-import NavBar             from './NavBar.jsx'
+import React, { Component } from 'react'
+import MessageList from './MessageList.jsx'
+import ChatBar from './ChatBar.jsx'
+import NavBar from './NavBar.jsx'
 // import Message             from './Message.jsx'
-const uuid = require('uuid/v1')
 
 class App extends Component {
-  constructor(props){
+  constructor(props) {
     super(props)
-    
+
     this.state = {
-      currentUser: {name: 'Anonymous',
-                    color: 'blue'},
+      currentUser: {
+        name: 'Anonymous',
+        color: 'blue'
+      },
       messages: [],
       userCounter: 0
     }
@@ -26,20 +27,20 @@ class App extends Component {
     //   }
     // }
     //listenere to receive message from server
-    this.socket.addEventListener("message", this.receiveMessage)  
-    
+    this.socket.addEventListener("message", this.receiveMessage)
+
   }
 
   render() {
     return (
       <div>
-        <NavBar userCounter       = {this.state.userCounter}/>
-        <MessageList messages     = {this.state.messages}/>
-        <ChatBar currentUser      = {this.state.currentUser.name}
-                 addNewMessage    = {this.addNewMessage}
-                 setUser          = {this.setUser}
-                 onSubmitMessage  = {this.onSubmitMessage}
-                  />
+        <NavBar userCounter={this.state.userCounter} />
+        <MessageList messages={this.state.messages} />
+        <ChatBar currentUser={this.state.currentUser.name}
+          addNewMessage={this.addNewMessage}
+          setUser={this.setUser}
+          onSubmitMessage={this.onSubmitMessage}
+        />
       </div>
     );
   }
@@ -52,44 +53,46 @@ class App extends Component {
       type: 'userNewMessage',
       color: this.state.currentUser.color
     }
-    console.log('color state',this.state.currentUser.color)
-    if (newUser === ''){
+    console.log('color state', this.state.currentUser.color)
+    if (newUser === '') {
       newMessage.username = 'Anonymous'
     } else {
       newMessage.username = newUser
-  }
+    }
     this.socket.send(JSON.stringify(newMessage))
   }
-  
+
   //handling message coming from the server
   receiveMessage = (receivedMessage) => {
     const msg = JSON.parse(receivedMessage.data);
     console.log('msgtype', msg.type)
-    switch(msg.type){
+    switch (msg.type) {
       case "incomingNotification":
       case "incomingMessage":
+      case "incomingMessagePicture":
         const messages = this.state.messages.concat(msg)
-        this.setState({messages})
+        this.setState({ messages })
         // console.log('messages',messages)
         break;
       case "userOnline":
-        this.setState({userCounter: msg.count})
+        this.setState({ userCounter: msg.count })
         // console.log('count',msg.count)
         break;
       case "userOffline":
-        this.setState({userCounter: msg.count})
+        this.setState({ userCounter: msg.count })
         // console.log('count',msg.count)
         break;
       case "userColor":
-        console.log('color',msg.color)
+        console.log('color', msg.color)
         this.setState(prevState => {
-            const currentUser = prevState.currentUser;
-            currentUser.color = msg.color
-            return{
-              currentUser: currentUser
-          }})
+          const currentUser = prevState.currentUser;
+          currentUser.color = msg.color
+          return {
+            currentUser: currentUser
+          }
+        })
         break;
-    } console.log("messages",this.state.messages);    
+    } console.log("messages", this.state.messages);
   }
 
   //username handler
@@ -106,17 +109,19 @@ class App extends Component {
         this.setState(prevState => {
           const currentUser = prevState.currentUser;
           currentUser.name = 'Anonymous'
-          return{
+          return {
             currentUser: currentUser
-        }})
+          }
+        })
         this.socket.send(JSON.stringify(systemMessage))
       } else {
         this.setState(prevState => {
           const currentUser = prevState.currentUser;
           currentUser.name = newUser
-          return{
+          return {
             currentUser: currentUser
-        }})
+          }
+        })
         this.socket.send(JSON.stringify(systemMessage))
       }
     }
@@ -140,7 +145,7 @@ class App extends Component {
   //   this.setState({currentUser: {name: evt.target.value}})
   // }
 }
-  
+
 
 export default App;
 
