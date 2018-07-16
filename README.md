@@ -6,7 +6,7 @@ A single page app that uses React, a popular front-end library created and used 
 
 ### Final Product
 
-![Chatty App]()
+![Chatty App](https://raw.githubusercontent.com/suwignyo/chattyApp/master/screenshot/chatty.gif)
 
 ## Usage
 Clone this repository and install the dependencies for chatty-app and chatty-server.
