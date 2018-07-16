@@ -11,8 +11,7 @@ body {
 }
 
 .chatbar {
-  background: tomato;
-  border-top: 1px solid black;
+  background: gainsboro;
   bottom: 0;
   display: flex;
   left: 0;
@@ -20,11 +19,12 @@ body {
   position: fixed;
   right: 0;
   margin-left: 17rem;
+  opacity: 0.85;
 }
 
 .chatbar-message,
 .chatbar-username {
-  border: 1px solid black;
+  border-radius: 5px;
   display: block;
   height: 40px;
   line-height: 40px;
@@ -49,6 +49,8 @@ body {
 .message.system {
   font-style: italic;
   padding: 5px 20px;
+  background-color: gainsboro;
+  opacity: 0.7;
 }
 
 .message-content,
@@ -69,11 +71,11 @@ body {
   font-weight: 700;
 }
 .picture{
-  height: 50px;
-  width: 50px;
+  height: 50%;
+  width: 50%;
 }
 .navbar {
-  background: tomato;
+  background: #56A3A6;
   border-bottom: 1px solid black;
   text-align: center;
   position: fixed;
@@ -84,6 +86,7 @@ body {
   height: 100vh;
   display: flex;
   justify-content: start;
+  opacity: 0.85;
 }
 
 .navbar-brand {

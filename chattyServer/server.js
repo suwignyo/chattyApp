@@ -38,6 +38,8 @@ wss.on('connection', (ws) => {
   });
 });
 
+
+//broadcast back all incoming message
 wss.broadcast = data => {
   wss.clients.forEach(client =>{
     if (client && client.readyState === client.OPEN){
@@ -46,7 +48,9 @@ wss.broadcast = data => {
   })
 }
 
-function handleMessage(incoming, client){
+//handles incoming message from client and send it back out
+//depending on its message type
+function handleMessage(incoming){
   const clientId = uuid();
   msg = JSON.parse(incoming)
   const incomingMessage = {
@@ -83,6 +87,9 @@ function handleMessage(incoming, client){
     }
 }
 
+
+//sends a message to the client that a user is connected
+//and gives an existing count of users online
 function clientConnected(client){
   let onlineUsers = wss.clients.size
   let connectionMessage = {
@@ -96,6 +103,8 @@ function clientConnected(client){
   }
 }
 
+//sends a message to the client that a user is disconnected
+//and gives an existing count of users online
 function clientDisconnected() {
   let onlineUsers = wss.clients.size
   let disconnectionMessage = {
